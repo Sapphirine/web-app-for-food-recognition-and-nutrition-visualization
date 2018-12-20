@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Showpage</title>
+	<!-- <style type="text/css">.div-inline{ display:inline }</style> -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		.container {
+			margin: 30px auto;
+			width: 1500px;
+			height: 300px;
+			/*border: 1px solid #000;*/
+		}
+		polyline {
+			fill: none;
+			stroke: #000000;
+			stroke-width: 2px;
+			stroke-dasharray: 5px;
+		}
+		fieldset {
+			border: 2px solid black;
+			outline: #8E44AD solid 10px;
+			margin: auto;
+			padding: 20px;
+			/*text-align: left;*/
+		}
+		h1.home_head {
+			text-align:center;
+			color:black;
+		}
+		ul {
+			list-style-type: none;
+    		margin: 0;
+    		padding: 0;
+    		overflow: hidden;
+    		background-color: #ccc;
+		}
+
+		li {
+		    float: left;
+		}
+
+		li a {
+		    display: block;
+		    color: black;
+		    text-align: center;
+		    padding: 14px 16px;
+		    text-decoration: none;
+		}
+
+		li a:hover {
+		    background-color: #111;
+		}
+		/*body {
+			background-color: #FDEDEC;
+		}*/
+	</style>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script type="text/javascript" src="static/js/pie_chart.js"></script>
+</head>
+<body>
+	<div class="jumbotron text-center" style="margin-bottom:0">
+		<h1>Food will be known now!</h1>
+		<!-- <p>We help you know what you eat and recommend what you should eat.</p>  -->
+	</div>
+
+	<ul>
+	  <!-- <li><a class="active" href="/">Home</a></li> -->
+	  <li><a calss="active" href="/magic">Back to magic world.</a></li>
+	  <!-- <li><a href="#contact">联系</a></li>
+	  <li><a href="#about">关于</a></li> -->
+	</ul>
+
+	{% for p in pack %}
+	<br />
+	<fieldset>
+		<legend>Recognition</legend>
+		<div class="container1">
+		<div class="row">
+			<div class="col-sm-8">
+				<p>Meal and recognition result.</p>
+				<p><img src="{{ p.img }}" width="128" height="128" align="left"><table><thead><th>Recognized Category</th><th>Probabiilty(%)</th></thead><tbody>{% for key,value in p.result.items() %}<tr><td>{{ key }}</td><td>{{ value }}</td></tr>{% endfor %}</tbody></table></p>
+				<!-- <br />
+				<br />
+				<p>Virtual meal.<img src="{{ p.virtual }}" width="64" height="64" ></p> -->
+				<div><a href="{{ p.food }}" target="_blank">To see the nutrition and calories information here.</a>	</div>
+			</div> 
+			<div class="col-sm-4">
+				<form action="/update" method="POST">
+					Enter quantity for food(g):<input type="number" name="q" value="{{ p.quan }}">
+					Submit here<input type="submit" name="s" value="{{ p.idx }}">
+				</form>
+			</div>
+		</div>
+	</div>
+</fieldset>
+	{% endfor %}
+	<br />
+	<br /> 
+	
+	<h2 align="center">Whole meal's report.</h2>
+	<!-- <p align="right" color="#34495E">
+		{% for w in whole_nutrition %}
+	{{ w.name }} : {{ w.value }}%{% endfor %}</p> -->
+	<div class="container1">
+		<div class="row">
+			<div class="col-sm-8">
+				<h3>Source of calories of your meal</h3>
+				<div class="container">
+					<svg width="100%" height="100%"></svg>
+					<script>
+						var dataset = {{ whole_nutrition|safe }};
+						draw(dataset);
+					</script>
+				</div> 
+			</div>
+			<div class="col-sm-4">
+				<h3>Our recommendation.</h3>
+				<!-- <h5>We give nutrition suggestions based on the left chart analysis.</h5> -->
+				<p>{{ announce }}</p>
+				<img src="{{ recommend }}" alt="food photo" width="300" height="300">
+			</div>
+		</div>
+	</div>
+
+	
+</body>
+</html>
